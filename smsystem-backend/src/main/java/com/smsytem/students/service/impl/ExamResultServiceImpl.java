@@ -56,7 +56,7 @@ public class ExamResultServiceImpl implements ExamResultService {
     public ExamResultDTO updateExamResult(Long resultId, ExamResultDTO examResultDTO) {
         ExamResult existingResult = examResultRepository.findById(resultId)
                 .orElseThrow(() -> new ResourceNotFoundException("Exam result not found with ID: " + resultId));
-        
+
         return createOrUpdateResult(examResultDTO, existingResult);
     }
 
@@ -117,14 +117,14 @@ public class ExamResultServiceImpl implements ExamResultService {
     public Map<String, Object> getExamResultStats(Long examId) {
         Map<String, Object> stats = new HashMap<>();
         List<Object[]> resultStats = examResultRepository.getResultStatsByExam(examId);
-        
+
         for (Object[] stat : resultStats) {
             stats.put(stat[0].toString().toLowerCase() + "Count", stat[1]);
         }
-        
+
         Double classAverage = examResultRepository.getClassAverageByExam(examId);
         stats.put("classAverage", classAverage);
-        
+
         return stats;
     }
 
@@ -132,11 +132,11 @@ public class ExamResultServiceImpl implements ExamResultService {
     public Map<String, Object> getGradeDistribution(Long examId) {
         Map<String, Object> distribution = new HashMap<>();
         List<Object[]> gradeStats = examResultRepository.getGradeDistributionByExam(examId);
-        
+
         for (Object[] stat : gradeStats) {
             distribution.put(stat[0].toString(), stat[1]);
         }
-        
+
         return distribution;
     }
 
@@ -144,11 +144,11 @@ public class ExamResultServiceImpl implements ExamResultService {
     public Map<String, Object> getStudentOverallPerformance(Long studentId) {
         Map<String, Object> performance = new HashMap<>();
         List<Object[]> stats = examResultRepository.getStudentOverallPerformance(studentId);
-        
+
         for (Object[] stat : stats) {
             performance.put(stat[0].toString().toLowerCase() + "Count", stat[1]);
         }
-        
+
         return performance;
     }
 
@@ -191,23 +191,23 @@ public class ExamResultServiceImpl implements ExamResultService {
     @Override
     public Map<String, Object> generateReportCard(Long studentId, Long classId) {
         Map<String, Object> reportCard = new HashMap<>();
-        
+
         // Get student info
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + studentId));
-        
+
         reportCard.put("studentName", student.getFirstName() + " " + student.getLastName());
         reportCard.put("studentRoll", student.getRoll());
         reportCard.put("className", student.getStudentClass().getClassName());
-        
+
         // Get all results for the student
         List<ExamResultDTO> results = getResultsByStudent(studentId);
         reportCard.put("results", results);
-        
+
         // Calculate overall performance
         Map<String, Object> overallPerformance = getStudentOverallPerformance(studentId);
         reportCard.put("overallPerformance", overallPerformance);
-        
+
         return reportCard;
     }
 
@@ -218,7 +218,7 @@ public class ExamResultServiceImpl implements ExamResultService {
         // Get exam and student entities
         Exam exam = examRepository.findById(examResultDTO.getExamId())
                 .orElseThrow(() -> new ResourceNotFoundException("Exam not found with ID: " + examResultDTO.getExamId()));
-        
+
         Student student = studentRepository.findById(examResultDTO.getStudentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + examResultDTO.getStudentId()));
 
@@ -228,7 +228,7 @@ public class ExamResultServiceImpl implements ExamResultService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + currentUsername));
 
         ExamResult result = existingResult != null ? existingResult : new ExamResult();
-        
+
         result.setExam(exam);
         result.setStudent(student);
         result.setMarksObtained(examResultDTO.getMarksObtained());
@@ -237,7 +237,7 @@ public class ExamResultServiceImpl implements ExamResultService {
         result.setIsAbsent(examResultDTO.getIsAbsent() != null ? examResultDTO.getIsAbsent() : false);
         result.setEvaluatedBy(evaluator);
         result.setEvaluationDate(LocalDate.now());
-        
+
         if (existingResult == null) {
             result.setCreatedAt(LocalDate.now());
         }
@@ -252,9 +252,24 @@ public class ExamResultServiceImpl implements ExamResultService {
 
     /**
      * Helper method to map ExamResult entity to DTO
+     * Build thủ công (không dùng modelMapper.map) để đồng bộ với
+     * ClassServiceImpl - tránh ConfigurationException: ambiguous mapping
+     * cho studentName (Student có firstName/lastName tách rời).
      */
     private ExamResultDTO mapToDTO(ExamResult result) {
-        ExamResultDTO dto = modelMapper.map(result, ExamResultDTO.class);
+        ExamResultDTO dto = new ExamResultDTO();
+        dto.setResultId(result.getResultId());
+        dto.setMarksObtained(result.getMarksObtained());
+        dto.setTotalMarks(result.getTotalMarks());
+        dto.setPercentage(result.getPercentage());
+        dto.setGrade(result.getGrade());
+        dto.setResultStatus(result.getResultStatus());
+        dto.setRemarks(result.getRemarks());
+        dto.setIsAbsent(result.getIsAbsent());
+        dto.setEvaluationDate(result.getEvaluationDate());
+        dto.setCreatedAt(result.getCreatedAt());
+        dto.setUpdatedAt(result.getUpdatedAt());
+
         dto.setExamId(result.getExam().getExamId());
         dto.setExamName(result.getExam().getExamName());
         dto.setSubjectName(result.getExam().getSubject().getSubjectName());
@@ -263,12 +278,12 @@ public class ExamResultServiceImpl implements ExamResultService {
         dto.setStudentRoll(String.valueOf(result.getStudent().getRoll()));
         dto.setEvaluatedBy(result.getEvaluatedBy().getId());
         dto.setEvaluatedByName(result.getEvaluatedBy().getName());
-        
+
         // Calculate percentage
         if (result.getTotalMarks() != null && result.getTotalMarks() > 0) {
             dto.setPercentage((result.getMarksObtained() / result.getTotalMarks()) * 100);
         }
-        
+
         return dto;
     }
 }

@@ -77,7 +77,15 @@ public class ClassServiceImpl implements ClassOrSectionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher doesn't exist!"));
         theClass.setClassTeacher(teacher);
         ClassOrSection savedClass = classRepository.save(theClass);
-        ClassDTO savedClassDTO = modelMapper.map(savedClass, ClassDTO.class);
+
+        // Build thủ công (không dùng modelMapper.map) để tránh lỗi
+        // ConfigurationException: ambiguous mapping cho teacherName
+        ClassDTO savedClassDTO = new ClassDTO();
+        savedClassDTO.setClassID(savedClass.getClassID());
+        savedClassDTO.setClassName(savedClass.getClassName());
+        savedClassDTO.setDescriptions(savedClass.getDescriptions());
+        savedClassDTO.setTeacherID(teacher.getTeacherID());
+        savedClassDTO.setTeacherName(teacher.getFirstName() + " " + teacher.getLastName());
         savedClassDTO.setSubjectIDs(classDTO.getSubjectIDs());
         return savedClassDTO;
     }
@@ -86,11 +94,27 @@ public class ClassServiceImpl implements ClassOrSectionService {
     public ClassDTO getClassById(Long classID) {
         ClassOrSection theClass = classRepository.findById(classID)
                 .orElseThrow(() -> new ResourceNotFoundException("Class doesn't exist!"));
-        ClassDTO classDTO = modelMapper.map(theClass, ClassDTO.class);
+
+        // Build DTO thủ công thay vì dùng modelMapper.map(), vì ModelMapper
+        // không tự suy luận được teacherName nên lấy từ firstName hay lastName
+        // của classTeacher (gây lỗi ConfigurationException: ambiguous mapping).
+        ClassDTO classDTO = new ClassDTO();
+        classDTO.setClassID(theClass.getClassID());
+        classDTO.setClassName(theClass.getClassName());
+        classDTO.setDescriptions(theClass.getDescriptions());
+
+        if (theClass.getClassTeacher() != null) {
+            classDTO.setTeacherID(theClass.getClassTeacher().getTeacherID());
+            classDTO.setTeacherName(
+                    theClass.getClassTeacher().getFirstName()
+                            + " "
+                            + theClass.getClassTeacher().getLastName());
+        }
 
         // Fetch subject IDs from the junction table
         Set<Long> subjectIDs = classRepository.findSubjectIDsByClassID(classID);
         classDTO.setSubjectIDs(subjectIDs);
+
         return classDTO;
     }
 
@@ -99,7 +123,6 @@ public class ClassServiceImpl implements ClassOrSectionService {
         ClassOrSection theClass = classRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Class is not exist with the given id: " + id));
         classRepository.deleteById(id);
-        modelMapper.map(theClass, ClassDTO.class);
     }
 
 }

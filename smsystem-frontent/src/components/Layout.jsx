@@ -10,6 +10,7 @@ const nav = [
   { to: '/students', label: 'Học sinh', icon: Users },
   { to: '/teachers', label: 'Giáo viên', icon: GraduationCap },
   { to: '/attendance', label: 'Điểm danh', icon: ClipboardCheck },
+  { to: '/subjects', label: 'Môn học', icon: BookOpen },
   { to: '/classes', label: 'Lớp', icon: School },
   { to: '/exams', label: 'Kỳ thi', icon: CalendarDays },
   { to: '/results', label: 'Kết quả', icon: Trophy },

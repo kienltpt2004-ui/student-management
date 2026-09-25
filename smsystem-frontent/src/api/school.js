@@ -33,6 +33,20 @@ export const classApi = {
     unwrap(await api.delete(`/classes/${id}`))
 }
 
+export const subjectsApi = {
+  list: async () =>
+    unwrap(await api.get('/subjects')),
+
+  create: async (data) =>
+    unwrap(await api.post('/subjects', data)),
+
+  get: async (id) =>
+    unwrap(await api.get(`/subjects/${id}`)),
+
+  remove: async (id) =>
+    unwrap(await api.delete(`/subjects/${id}`))
+}
+
 export const attendanceApi = {
   student: async (studentId) => unwrap(await api.get(`/attendance/student/${studentId}`)),
   stats: async (studentId, startDate, endDate) =>

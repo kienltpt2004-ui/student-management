@@ -183,13 +183,13 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
 
         Map<String, Object> stats = new HashMap<>();
-        
+
         Long presentDays = attendanceRepository.countByStudentAndStatusInDateRange(studentId, startDate, endDate, AttendanceStatus.PRESENT);
         Long absentDays = attendanceRepository.countByStudentAndStatusInDateRange(studentId, startDate, endDate, AttendanceStatus.ABSENT);
         Long lateDays = attendanceRepository.countByStudentAndStatusInDateRange(studentId, startDate, endDate, AttendanceStatus.LATE);
         Long excusedDays = attendanceRepository.countByStudentAndStatusInDateRange(studentId, startDate, endDate, AttendanceStatus.EXCUSED);
         Long halfDays = attendanceRepository.countByStudentAndStatusInDateRange(studentId, startDate, endDate, AttendanceStatus.HALF_DAY);
-        
+
         Long totalDays = presentDays + absentDays + lateDays + excusedDays + halfDays;
         Double attendancePercentage = totalDays > 0 ? (presentDays.doubleValue() / totalDays.doubleValue()) * 100 : 0.0;
 
@@ -207,17 +207,17 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public Map<String, Object> getClassAttendanceStats(Long classId, LocalDate startDate, LocalDate endDate) {
         List<Object[]> results = attendanceRepository.getAttendanceStatsByClass(classId, startDate, endDate);
-        
+
         Map<String, Object> stats = new HashMap<>();
         Long totalRecords = 0L;
-        
+
         for (Object[] result : results) {
             AttendanceStatus status = (AttendanceStatus) result[0];
             Long count = (Long) result[1];
             stats.put(status.name().toLowerCase() + "Count", count);
             totalRecords += count;
         }
-        
+
         stats.put("totalRecords", totalRecords);
         return stats;
     }
@@ -238,9 +238,21 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     /**
      * Helper method to map Attendance entity to DTO
+     * Build thủ công (không dùng modelMapper.map) để đồng bộ với
+     * ClassServiceImpl - tránh ConfigurationException: ambiguous mapping
+     * cho studentName (Student có firstName/lastName tách rời).
      */
     private AttendanceDTO mapToDTO(Attendance attendance) {
-        AttendanceDTO dto = modelMapper.map(attendance, AttendanceDTO.class);
+        AttendanceDTO dto = new AttendanceDTO();
+        dto.setAttendanceId(attendance.getAttendanceId());
+        dto.setAttendanceDate(attendance.getAttendanceDate());
+        dto.setStatus(attendance.getStatus());
+        dto.setCheckInTime(attendance.getCheckInTime());
+        dto.setCheckOutTime(attendance.getCheckOutTime());
+        dto.setRemarks(attendance.getRemarks());
+        dto.setCreatedAt(attendance.getCreatedAt());
+        dto.setUpdatedAt(attendance.getUpdatedAt());
+
         dto.setStudentId(attendance.getStudent().getStudentID());
         dto.setStudentName(attendance.getStudent().getFirstName() + " " + attendance.getStudent().getLastName());
         dto.setClassName(attendance.getStudent().getStudentClass().getClassName());
