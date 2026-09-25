@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("api/subjects")
 public class SubjectController {
     private SubjectService subjectService;
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @PostMapping()
     public ResponseEntity<?> creatingSubject(@RequestBody SubjectDTO subjectDTO) {
         try {
@@ -72,7 +72,7 @@ public class SubjectController {
     }
 
     // delete an subjects
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSubject(@PathVariable Long id) {
         try {

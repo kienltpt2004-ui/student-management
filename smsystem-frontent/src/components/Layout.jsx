@@ -1,7 +1,8 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Users, GraduationCap, ClipboardCheck, CalendarDays,
-  Trophy, LogOut, Menu, X, School, Bell, Search
+  Trophy, LogOut, Menu, X, School, Bell, Search,
+  BookAIcon
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -10,7 +11,7 @@ const nav = [
   { to: '/students', label: 'Học sinh', icon: Users },
   { to: '/teachers', label: 'Giáo viên', icon: GraduationCap },
   { to: '/attendance', label: 'Điểm danh', icon: ClipboardCheck },
-  { to: '/subjects', label: 'Môn học', icon: BookOpen },
+  { to: '/subjects', label: 'Môn học', icon: BookAIcon },
   { to: '/classes', label: 'Lớp', icon: School },
   { to: '/exams', label: 'Kỳ thi', icon: CalendarDays },
   { to: '/results', label: 'Kết quả', icon: Trophy },

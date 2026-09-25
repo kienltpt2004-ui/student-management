@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Students from './pages/Students'
 import Teachers from './pages/Teachers'
+import Subjects from './pages/Subject'
 import Classes from './pages/Class'
 import Attendance from './pages/Attendance'
 import Exams from './pages/Exams'
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/" element={<Dashboard/>}/>
         <Route path="/students" element={<Students/>}/>
         <Route path="/teachers" element={<Teachers/>}/>
+        <Route path="/subjects" element={<Subject/>}/>
         <Route path="/classes" element={<Classes />} />
         <Route path="/attendance" element={<Attendance/>}/>
         <Route path="/exams" element={<Exams/>}/>
