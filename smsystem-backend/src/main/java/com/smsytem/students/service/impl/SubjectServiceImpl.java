@@ -91,12 +91,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         List<Subject> subjects = subjectRepository.findAll();
 
-        if (subjects.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "No subjects found! Please add subject"
-            );
-        }
-
+        // Danh sách rỗng KHÔNG phải lỗi - trả về 200 kèm mảng rỗng thay vì 404
         return subjects.stream()
                 .map(sub -> modelMapper.map(
                         sub,

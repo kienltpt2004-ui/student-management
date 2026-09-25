@@ -41,9 +41,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDTO> getAllStudents() {
         List<Student> students = studentRepository.findAll();
-        if (students.isEmpty()) {
-            throw new ResourceNotFoundException("No student found! Please add student");
-        }
+        // Danh sách rỗng KHÔNG phải lỗi - trả về 200 kèm mảng rỗng thay vì 404
         // Update all students feesDue column
         students.forEach(Student::calculateFeesDue);
         return students.stream()

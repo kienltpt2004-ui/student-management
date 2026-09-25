@@ -1,397 +1,214 @@
-# School Management System
+# Hệ thống Quản lý Trường học
 
-A comprehensive, full-stack School Management System built with Spring Boot and React. This system provides complete management solutions for educational institutions including student management, attendance tracking, exam management, fee management, and more.
-
-## 🏫 System Overview
-
-This School Management System is designed to handle all aspects of school administration, from student enrollment to academic performance tracking. It supports multiple user roles with appropriate access controls and provides a seamless experience for administrators, teachers, students, and parents.
-
-## ✨ Key Features
-
-### 🎓 **Academic Management**
-- **Student Management:** Complete student lifecycle management with personal, academic, and guardian information
-- **Teacher Management:** Teacher profiles, qualifications, and assignment tracking
-- **Class & Section Management:** Organize students into classes with subject assignments
-- **Subject Management:** Subject creation with teacher assignments and schedules
-- **Timetable Management:** Dynamic class scheduling with period management
-
-### 📊 **Attendance & Performance**
-- **Attendance Tracking:** Daily attendance with multiple status options (Present, Absent, Late, Excused, Half-day)
-- **Class-wise Attendance:** Bulk attendance marking for entire classes
-- **Attendance Analytics:** Detailed attendance statistics and percentage calculations
-- **Attendance Reports:** Generate comprehensive attendance reports
-
-### 📝 **Examination System**
-- **Exam Management:** Create and schedule exams with detailed configurations
-- **Result Management:** Record and manage exam results with automatic grade calculations
-- **Grade System:** Comprehensive grading system (A+, A, B+, B, C+, C, D, F)
-- **Performance Analytics:** Class averages, top performers, and failure analysis
-- **Report Cards:** Generate detailed student report cards
-
-### 💰 **Financial Management**
-- **Fee Structure:** Flexible fee management with multiple fee types
-- **Payment Tracking:** Track payments, due dates, and outstanding balances
-- **Payment Methods:** Support for multiple payment methods
-- **Fee Reports:** Generate financial reports and receipts
-
-### 📢 **Communication System**
-- **Notifications:** System-wide notification management
-- **Announcements:** Targeted announcements for specific audiences
-- **Priority Levels:** Urgent, high, medium, and low priority notifications
-- **Multi-audience Support:** Notifications for students, teachers, parents, and staff
-
-### 👨‍👩‍👧‍👦 **Parent Portal**
-- **Child Information:** Access to children's academic information
-- **Attendance Monitoring:** View attendance records and statistics
-- **Result Tracking:** Access to exam results and report cards
-- **Fee Status:** Monitor fee payments and outstanding balances
-
-### 🔐 **Security & Access Control**
-- **Role-based Access Control (RBAC):** Comprehensive permission system
-- **JWT Authentication:** Secure token-based authentication
-- **Multiple User Roles:** Admin, Principal, Teacher, Student, Parent, Accountant, Librarian, Receptionist, Clerk
-- **Secure Endpoints:** API endpoint security with role-based restrictions
-
-## 🏗️ System Architecture
-
-### **Backend (Spring Boot)**
-- **Framework:** Spring Boot 3.2.3
-- **Security:** Spring Security with JWT
-- **Database:** PostgreSQL with JPA/Hibernate
-- **Documentation:** Swagger/OpenAPI integration
-- **Architecture Pattern:** Layered architecture (Controller → Service → Repository → Entity)
-
-### **Frontend (React)**
-- **Framework:** React with Vite
-- **Styling:** Tailwind CSS
-- **Build Tool:** Vite for fast development and building
-
-## 🚀 Technologies Used
-
-### **Backend Technologies**
-- **Java 17:** Modern Java features and performance
-- **Spring Boot 3.2.3:** Application framework
-- **Spring Security:** Authentication and authorization
-- **Spring Data JPA:** Database abstraction layer
-- **PostgreSQL:** Relational database
-- **JWT (JSON Web Tokens):** Secure authentication
-- **ModelMapper:** Object mapping
-- **Lombok:** Reduce boilerplate code
-- **Swagger/OpenAPI:** API documentation
-
-### **Frontend Technologies**
-- **React:** User interface library
-- **Vite:** Build tool and development server
-- **Tailwind CSS:** Utility-first CSS framework
-- **JavaScript/TypeScript:** Programming languages
-
-### **Development Tools**
-- **Maven:** Dependency management
-- **Git:** Version control
-- **Swagger UI:** API testing interface
-
-## 📊 Database Schema
-
-### **Core Entities**
-- **Users:** Authentication and basic user information
-- **Roles:** Role-based access control
-- **Students:** Student personal and academic information
-- **Teachers:** Teacher profiles and qualifications
-- **Parents:** Parent/guardian information with child relationships
-- **Classes:** Class organization and management
-- **Subjects:** Subject details with teacher assignments
-
-### **Academic Entities**
-- **Attendance:** Daily attendance tracking
-- **Exams:** Exam schedules and configurations
-- **ExamResults:** Student exam results and grades
-- **Timetable:** Class schedules and periods
-
-### **Administrative Entities**
-- **Fees:** Fee structure and payment tracking
-- **Notifications:** System notifications and announcements
-
-## 🔑 User Roles & Permissions
-
-### **ADMIN**
-- Full system access
-- User management
-- System configuration
-- All CRUD operations
-
-### **PRINCIPAL**
-- Academic oversight
-- Teacher management
-- Student management
-- Exam management
-- Financial oversight
-
-### **TEACHER**
-- Student management (assigned classes)
-- Attendance marking
-- Exam creation and evaluation
-- Result entry
-- Communication with parents
-
-### **STUDENT**
-- View personal information
-- Check attendance records
-- View exam results
-- Access timetables
-- Receive notifications
-
-### **PARENT**
-- View children's information
-- Monitor attendance
-- Check exam results
-- Fee status monitoring
-- Receive notifications
-
-### **ACCOUNTANT**
-- Fee management
-- Payment processing
-- Financial reports
-- Transaction tracking
-
-### **Support Roles**
-- **Librarian:** Library management
-- **Receptionist:** Basic information access
-- **Clerk:** Administrative tasks
-
-## 🛠️ Setup and Installation
-
-### **Prerequisites**
-- Java 17 or higher
-- Node.js 16 or higher
-- PostgreSQL 12 or higher
-- Git
-
-### **Backend Setup**
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/dev-shahed/student-management-system.git
-   cd student-management-system/smsystem-backend
-   ```
-
-2. **Configure the database:**
-   - Create a PostgreSQL database named `sms-postgres`
-   - Update `application.properties` with your database credentials:
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/sms-postgres
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
-
-3. **Build and run the application:**
-   ```bash
-   ./mvnw clean install
-   ./mvnw spring-boot:run 
-   or ./start.sh
-   ```
-
-   The backend will start on `http://localhost:8080`
-
-### **Frontend Setup**
-
-1. **Navigate to frontend directory:**
-   ```bash
-   cd ../smsystem-frontend
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-
-   The frontend will start on `http://localhost:5173`
-
-### **Database Initialization**
-
-The system includes automatic data initialization that will:
-- Create required roles (ADMIN, PRINCIPAL, TEACHER, STUDENT, PARENT, etc.)
-- Set up basic system configurations
-
-## 📖 API Documentation
-
-### **Swagger Documentation**
-Access the complete API documentation at: `http://localhost:8080/swagger-ui`
-
-### **Main API Endpoints**
-
-#### **Authentication**
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-
-#### **Student Management**
-- `GET /api/students` - Get all students
-- `POST /api/students` - Create new student
-- `GET /api/students/{id}` - Get student by ID
-- `PUT /api/students/{id}` - Update student
-- `DELETE /api/students/{id}` - Delete student
-
-#### **Attendance Management**
-- `POST /api/attendance/mark` - Mark attendance
-- `POST /api/attendance/mark-class/{classId}` - Mark class attendance
-- `GET /api/attendance/student/{studentId}` - Get student attendance
-- `GET /api/attendance/stats/student/{studentId}` - Get attendance statistics
-
-#### **Exam Management**
-- `POST /api/exams` - Create exam
-- `GET /api/exams` - Get all exams
-- `GET /api/exams/class/{classId}` - Get class exams
-- `GET /api/exams/upcoming/class/{classId}` - Get upcoming exams
-
-#### **Exam Results**
-- `POST /api/exam-results` - Add exam result
-- `GET /api/exam-results/exam/{examId}` - Get exam results
-- `GET /api/exam-results/student/{studentId}` - Get student results
-- `GET /api/exam-results/student/{studentId}/report-card` - Generate report card
-
-## 🔧 Configuration
-
-### **Application Properties**
-Key configuration properties in `application.properties`:
-
-```properties
-# Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/sms-postgres
-spring.datasource.username=postgres
-spring.datasource.password=your_password
-
-# JWT Configuration
-app.jwt-secret=your-jwt-secret-key
-app.jwt-token-expiration-time=86400000
-
-# Hibernate Configuration
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.open-in-view=true
-
-# Logging Configuration
-logging.level.org.springframework.security=DEBUG
-```
-
-## 🚀 Development
-
-### **Project Structure**
-```
-smsystem-backend/
-├── src/main/java/com/smsytem/students/
-│   ├── config/          # Configuration classes
-│   ├── controller/      # REST controllers
-│   ├── dto/            # Data Transfer Objects
-│   ├── entity/         # JPA entities
-│   ├── exception/      # Custom exceptions
-│   ├── repository/     # Data repositories
-│   ├── security/       # Security configuration
-│   └── service/        # Business logic services
-├── src/main/resources/
-│   └── application.properties
-└── pom.xml
-```
-
-### **Code Quality Standards**
-- **Documentation:** All classes and methods include comprehensive JavaDoc
-- **Error Handling:** Consistent exception handling with custom exceptions
-- **Security:** Role-based access control on all endpoints
-- **Validation:** Input validation on all DTOs
-- **Testing:** Unit and integration tests (recommended to add)
-
-## 🔒 Security Features
-
-### **Authentication & Authorization**
-- JWT-based authentication
-- Password encryption using BCrypt
-- Role-based access control (RBAC)
-- Secure endpoint protection
-- Token expiration handling
-
-### **Data Protection**
-- Input validation and sanitization
-- SQL injection prevention through JPA
-- XSS protection
-- CSRF protection
-
-## 📈 Performance Features
-
-### **Database Optimization**
-- Efficient JPA queries
-- Lazy loading for relationships
-- Database indexing on key fields
-- Connection pooling
-
-### **Application Performance**
-- Stateless architecture
-- Efficient caching strategies
-- Optimized API responses
-- Modular design for scalability
-
-## 🧪 Testing
-
-### **Recommended Testing Strategy**
-- **Unit Tests:** Service layer business logic
-- **Integration Tests:** Repository layer database operations
-- **End-to-End Tests:** Complete API workflow testing
-- **Security Tests:** Authentication and authorization
-
-### **Test Frameworks**
-- JUnit 5 for unit testing
-- Spring Boot Test for integration testing
-- TestContainers for database testing
-- MockMvc for controller testing
-
-## 🚀 Deployment
-
-### **Production Deployment**
-1. **Build the application:**
-   ```bash
-   ./mvnw clean package -DskipTests
-   ```
-
-2. **Docker deployment (optional):**
-   ```dockerfile
-   FROM openjdk:17-jdk-slim
-   COPY target/smsystem-0.0.1-SNAPSHOT.jar app.jar
-   EXPOSE 8080
-   ENTRYPOINT ["java", "-jar", "/app.jar"]
-   ```
-
-3. **Environment-specific configuration:**
-   - Use Spring profiles for different environments
-   - External configuration for database credentials
-   - SSL/TLS configuration for production
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Support
-
-For support and questions:
-- Create an issue on GitHub
-- Contact the development team
-- Check the documentation and API reference
-
-## 🙏 Acknowledgments
-
-- Spring Boot community for excellent documentation
-- React community for frontend best practices
-- PostgreSQL for reliable database management
-- All contributors who help improve this system
+Một hệ thống quản lý trường học full-stack toàn diện được xây dựng bằng Spring Boot và React. Hệ thống cung cấp các giải pháp quản lý đầy đủ cho các cơ sở giáo dục, bao gồm quản lý học sinh, theo dõi điểm danh, quản lý kỳ thi, quản lý học phí và nhiều chức năng khác.
 
 ---
 
-**Built with ❤️ for educational institutions worldwide**
+## 🏫 Tổng quan hệ thống
+
+Hệ thống Quản lý Trường học được thiết kế để xử lý tất cả các khía cạnh của công tác quản lý nhà trường, từ việc đăng ký học sinh đến theo dõi kết quả học tập. Hệ thống hỗ trợ nhiều vai trò người dùng với các quyền truy cập phù hợp, đồng thời cung cấp trải nghiệm sử dụng thuận tiện cho quản trị viên, giáo viên, học sinh và phụ huynh.
+
+---
+
+## ✨ Các chức năng chính
+
+### 🎓 **Quản lý học tập**
+
+- **Quản lý học sinh:** Quản lý toàn bộ vòng đời của học sinh, bao gồm thông tin cá nhân, thông tin học tập và thông tin người giám hộ.
+- **Quản lý giáo viên:** Quản lý hồ sơ giáo viên, trình độ chuyên môn và phân công giảng dạy.
+- **Quản lý lớp & khối:** Tổ chức học sinh theo lớp và phân công môn học.
+- **Quản lý môn học:** Tạo và quản lý môn học cùng với giáo viên phụ trách và lịch học.
+- **Quản lý thời khóa biểu:** Lập lịch học động cho các lớp với hệ thống quản lý tiết học.
+
+### 📊 **Điểm danh & kết quả học tập**
+
+- **Theo dõi điểm danh:** Điểm danh hàng ngày với nhiều trạng thái khác nhau (Có mặt, Vắng mặt, Đi muộn, Có phép, Nửa ngày).
+- **Điểm danh theo lớp:** Điểm danh hàng loạt cho toàn bộ học sinh trong một lớp.
+- **Phân tích điểm danh:** Thống kê chi tiết về điểm danh và tính toán tỷ lệ phần trăm.
+- **Báo cáo điểm danh:** Tạo các báo cáo điểm danh toàn diện.
+
+### 📝 **Hệ thống thi**
+
+- **Quản lý kỳ thi:** Tạo và lên lịch các kỳ thi với nhiều cấu hình chi tiết.
+- **Quản lý kết quả:** Nhập và quản lý kết quả thi với chức năng tự động tính điểm/xếp loại.
+- **Hệ thống xếp loại:** Hệ thống xếp loại toàn diện (A+, A, B+, B, C+, C, D, F).
+- **Phân tích kết quả:** Thống kê điểm trung bình của lớp, học sinh có thành tích cao và phân tích kết quả không đạt.
+- **Phiếu điểm:** Tạo phiếu kết quả học tập chi tiết cho học sinh.
+
+### 💰 **Quản lý tài chính**
+
+- **Cấu trúc học phí:** Quản lý học phí linh hoạt với nhiều loại phí khác nhau.
+- **Theo dõi thanh toán:** Theo dõi các khoản thanh toán, ngày đến hạn và số tiền còn nợ.
+- **Phương thức thanh toán:** Hỗ trợ nhiều phương thức thanh toán.
+- **Báo cáo học phí:** Tạo các báo cáo tài chính và biên lai.
+
+### 📢 **Hệ thống liên lạc**
+
+- **Thông báo:** Quản lý thông báo trên toàn hệ thống.
+- **Thông báo chung:** Gửi thông báo đến các đối tượng cụ thể.
+- **Mức độ ưu tiên:** Thông báo với các mức độ khẩn cấp, cao, trung bình và thấp.
+- **Hỗ trợ nhiều đối tượng:** Gửi thông báo đến học sinh, giáo viên, phụ huynh và nhân viên.
+
+### 👨‍👩‍👧‍👦 **Cổng thông tin phụ huynh**
+
+- **Thông tin con em:** Truy cập thông tin học tập của con.
+- **Theo dõi điểm danh:** Xem lịch sử và thống kê điểm danh.
+- **Theo dõi kết quả:** Truy cập kết quả thi và phiếu điểm.
+- **Tình trạng học phí:** Theo dõi các khoản học phí đã thanh toán và còn nợ.
+
+### 🔐 **Bảo mật & Kiểm soát truy cập**
+
+- **Kiểm soát truy cập dựa trên vai trò (RBAC):** Hệ thống phân quyền toàn diện.
+- **Xác thực JWT:** Xác thực an toàn dựa trên token.
+- **Nhiều vai trò người dùng:** Admin, Principal, Teacher, Student, Parent, Accountant, Librarian, Receptionist, Clerk.
+- **Endpoint an toàn:** Bảo vệ các API endpoint dựa trên quyền truy cập của từng vai trò.
+
+---
+
+## 🏗️ Kiến trúc hệ thống
+
+### **Backend (Spring Boot)**
+
+- **Framework:** Spring Boot 3.2.3
+- **Bảo mật:** Spring Security với JWT
+- **Cơ sở dữ liệu:** PostgreSQL với JPA/Hibernate
+- **Tài liệu API:** Tích hợp Swagger/OpenAPI
+- **Mô hình kiến trúc:** Kiến trúc phân lớp (Controller → Service → Repository → Entity)
+
+### **Frontend (React)**
+
+- **Framework:** React với Vite
+- **Styling:** Tailwind CSS
+- **Công cụ build:** Vite cho quá trình phát triển và build nhanh.
+
+---
+
+## 🚀 Công nghệ sử dụng
+
+### **Công nghệ Backend**
+
+- **Java 17:** Các tính năng Java hiện đại và hiệu năng tốt.
+- **Spring Boot 3.2.3:** Framework phát triển ứng dụng.
+- **Spring Security:** Xác thực và phân quyền.
+- **Spring Data JPA:** Lớp trừu tượng hóa cơ sở dữ liệu.
+- **PostgreSQL:** Cơ sở dữ liệu quan hệ.
+- **JWT (JSON Web Tokens):** Xác thực an toàn.
+- **ModelMapper:** Ánh xạ giữa các đối tượng.
+- **Lombok:** Giảm lượng code lặp lại.
+- **Swagger/OpenAPI:** Tài liệu API.
+
+### **Công nghệ Frontend**
+
+- **React:** Thư viện xây dựng giao diện người dùng.
+- **Vite:** Công cụ build và development server.
+- **Tailwind CSS:** Framework CSS theo hướng utility-first.
+- **JavaScript/TypeScript:** Ngôn ngữ lập trình.
+
+### **Công cụ phát triển**
+
+- **Maven:** Quản lý dependency.
+- **Git:** Quản lý phiên bản.
+- **Swagger UI:** Giao diện kiểm thử API.
+
+---
+
+## 📊 Database Schema
+
+### **Các Entity chính**
+
+- **Users:** Xác thực và thông tin cơ bản của người dùng.
+- **Roles:** Kiểm soát truy cập dựa trên vai trò.
+- **Students:** Thông tin cá nhân và học tập của học sinh.
+- **Teachers:** Hồ sơ và trình độ chuyên môn của giáo viên.
+- **Parents:** Thông tin phụ huynh/người giám hộ và mối quan hệ với học sinh.
+- **Classes:** Tổ chức và quản lý lớp học.
+- **Subjects:** Thông tin môn học và giáo viên phụ trách.
+
+### **Các Entity học tập**
+
+- **Attendance:** Theo dõi điểm danh hàng ngày.
+- **Exams:** Lịch thi và cấu hình kỳ thi.
+- **ExamResults:** Kết quả thi và điểm của học sinh.
+- **Timetable:** Thời khóa biểu và các tiết học.
+
+### **Các Entity quản trị**
+
+- **Fees:** Cấu trúc học phí và theo dõi thanh toán.
+- **Notifications:** Thông báo và thông tin truyền đạt trong hệ thống.
+
+---
+
+## 🔑 Vai trò người dùng & Quyền hạn
+
+### **ADMIN**
+
+- Toàn quyền truy cập hệ thống.
+- Quản lý người dùng.
+- Cấu hình hệ thống.
+- Thực hiện tất cả các thao tác CRUD.
+
+### **PRINCIPAL**
+
+- Giám sát hoạt động học tập.
+- Quản lý giáo viên.
+- Quản lý học sinh.
+- Quản lý kỳ thi.
+- Giám sát tài chính.
+
+### **TEACHER**
+
+- Quản lý học sinh trong các lớp được phân công.
+- Điểm danh.
+- Tạo và đánh giá kỳ thi.
+- Nhập kết quả.
+- Trao đổi với phụ huynh.
+
+### **STUDENT**
+
+- Xem thông tin cá nhân.
+- Kiểm tra lịch sử điểm danh.
+- Xem kết quả thi.
+- Xem thời khóa biểu.
+- Nhận thông báo.
+
+### **PARENT**
+
+- Xem thông tin của con.
+- Theo dõi điểm danh.
+- Kiểm tra kết quả thi.
+- Theo dõi tình trạng học phí.
+- Nhận thông báo.
+
+### **ACCOUNTANT**
+
+- Quản lý học phí.
+- Xử lý thanh toán.
+- Báo cáo tài chính.
+- Theo dõi giao dịch.
+
+### **Các vai trò hỗ trợ**
+
+- **Librarian:** Quản lý thư viện.
+- **Receptionist:** Truy cập các thông tin cơ bản.
+- **Clerk:** Thực hiện các công việc hành chính.
+
+---
+
+## 🛠️ Cài đặt và thiết lập
+
+### **Yêu cầu hệ thống**
+
+- Java 17 trở lên
+- Node.js 16 trở lên
+- PostgreSQL 12 trở lên
+- Git
+
+---
+
+### **Thiết lập Backend**
+
+#### 1. **Clone repository**
+
+```bash
+git clone https://github.com/dev-shahed/student-management-system.git
+cd student-management-system/smsystem-backend

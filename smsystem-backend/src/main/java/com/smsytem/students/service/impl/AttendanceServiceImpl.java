@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public AttendanceDTO markAttendance(AttendanceDTO attendanceDTO) {
@@ -253,11 +251,19 @@ public class AttendanceServiceImpl implements AttendanceService {
         dto.setCreatedAt(attendance.getCreatedAt());
         dto.setUpdatedAt(attendance.getUpdatedAt());
 
-        dto.setStudentId(attendance.getStudent().getStudentID());
-        dto.setStudentName(attendance.getStudent().getFirstName() + " " + attendance.getStudent().getLastName());
-        dto.setClassName(attendance.getStudent().getStudentClass().getClassName());
-        dto.setMarkedBy(attendance.getMarkedBy().getId());
-        dto.setMarkedByName(attendance.getMarkedBy().getName());
+        if (attendance.getStudent() != null) {
+            dto.setStudentId(attendance.getStudent().getStudentID());
+            dto.setStudentName(attendance.getStudent().getFirstName() + " " + attendance.getStudent().getLastName());
+            if (attendance.getStudent().getStudentClass() != null) {
+                dto.setClassName(
+                        attendance.getStudent().getStudentClass().getClassName());
+            }
+        }
+
+        if (attendance.getMarkedBy() != null) {
+            dto.setMarkedBy(attendance.getMarkedBy().getId());
+            dto.setMarkedByName(attendance.getMarkedBy().getName());
+        }
         return dto;
     }
 }

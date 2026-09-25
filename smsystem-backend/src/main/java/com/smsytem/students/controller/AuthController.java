@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,19 +32,20 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    // build api for register..
+    // build api for register
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody(required = true) RegisterDTO registerDTO) {
         try {
             authService.register(registerDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.success("Registration Successful!", null));
+                    .body(ApiResponse.success("Đăng ký thành công!", null));
         } catch (AuthException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(ApiResponse.error(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error, try again.."));
+                    .body(ApiResponse.error("Lỗi máy chủ nội bộ, vui lòng thử lại.."));
         }
     }
 
@@ -54,8 +56,8 @@ public class AuthController {
             String token = authService.login(loginDTO);
             JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
             jwtAuthResponse.setAccessToken(token);
-            jwtAuthResponse.setMessage("Login successful");
-            jwtAuthResponse.setStatus("success");
+            jwtAuthResponse.setMessage("Đăng nhập thành công");
+            jwtAuthResponse.setStatus("Thành công");
             return ResponseEntity.status(HttpStatus.OK).body(jwtAuthResponse);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -65,7 +67,7 @@ public class AuthController {
                     .body(ApiResponse.error(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("An internal server error occurred"));
+                    .body(ApiResponse.error("Đã xảy ra lỗi máy chủ nội bộ"));
         }
     }
 

@@ -32,9 +32,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<TeacherDTO> allTeacher() {
         List<Teacher> teachers = teacherRepository.findAll();
-        if (teachers.isEmpty()) {
-            throw new ResourceNotFoundException("No teacher found!");
-        }
+        // Danh sách rỗng KHÔNG phải lỗi - trả về 200 kèm mảng rỗng thay vì 404
         return teachers.stream().map(teacher -> modelMapper.map(teacher, TeacherDTO.class))
                 .collect(Collectors.toList());
     }
@@ -64,7 +62,6 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher deleteTeacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("teacher not found with ID: " + id));
         teacherRepository.deleteById(id);
-        modelMapper.map(deleteTeacher, TeacherDTO.class);
     }
 
 }

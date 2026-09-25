@@ -163,21 +163,22 @@ public class ExamResultServiceImpl implements ExamResultService {
     }
 
     @Override
-    public List<ExamResultDTO> bulkUploadResults(Long examId, List<ExamResultDTO> results) {
-        // Verify exam exists
+    public List<ExamResultDTO> bulkUploadResults(
+            Long examId,
+            List<ExamResultDTO> results) {
+
         if (!examRepository.existsById(examId)) {
-            throw new ResourceNotFoundException("Exam not found with ID: " + examId);
+            throw new ResourceNotFoundException(
+                    "Exam not found with ID: " + examId
+            );
         }
 
-        List<ExamResult> savedResults = results.stream()
+        return results.stream()
                 .map(dto -> {
                     dto.setExamId(examId);
                     return createOrUpdateResult(dto, null);
                 })
-                .map(dto -> examResultRepository.findByExamExamIdAndStudentStudentID(dto.getExamId(), dto.getStudentId()).orElse(null))
                 .collect(Collectors.toList());
-
-        return savedResults.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
